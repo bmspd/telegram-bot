@@ -5,9 +5,6 @@ import telebot
 from helpers.currency import currency_keyboard, CURRENCIES, second_currency_keyboard
 from helpers.filters import currency_first_factory, bind_filters, currency_second_factory
 
-store = {
-    'users': {}
-}
 
 if __name__ == '__main__':
     load_dotenv()
