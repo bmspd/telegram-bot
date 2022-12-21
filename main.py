@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 import requests
 import telebot
+import pandas as pd
 from helpers.currency import currency_keyboard, CURRENCIES, second_currency_keyboard
 from helpers.filters import currency_first_factory, bind_filters, currency_second_factory
 
@@ -50,6 +51,16 @@ if __name__ == '__main__':
         data: dict = response.json()
         bot.send_message(message.chat.id, text=data.get('result'))
 
+    @bot.message_handler(commands=['excel'])
+    def excel_action(message):
+        bot.send_message(message.chat.id, text='${row} ${colum}')
+        bot.register_next_step_handler(message, search_excel)
+
+    def search_excel(message):
+        [row, column] = map(int, message.text.split(' '))
+        dataframe = pd.read_excel('Book.xlsx')
+        value = dataframe.at[row - 1, column - 1]
+        bot.send_message(message.chat.id, text=value)
 
     @bot.message_handler(func=lambda msg: True)
     def echo_all(message):
